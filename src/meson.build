@@ -27,6 +27,7 @@ gnome_software_sources = [
   'gs-css.c',
   'gs-content-rating.c',
   'gs-details-page.c',
+  'gs-eula-dialog.c',
   'gs-extras-page.c',
   'gs-feature-tile.c',
   'gs-first-run-dialog.c',

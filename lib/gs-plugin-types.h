@@ -227,6 +227,7 @@ typedef enum {
  * @GS_PLUGIN_ACTION_DOWNLOAD:			Download an application
  * @GS_PLUGIN_ACTION_GET_ALTERNATES:		Get the alternates for a specific application
  * @GS_PLUGIN_ACTION_GET_LANGPACKS:		Get appropriate language pack
+ * @GS_PLUGIN_ACTION_SHOW_EULA:			Show EULA
  *
  * The plugin action.
  **/
@@ -272,6 +273,7 @@ typedef enum {
 	GS_PLUGIN_ACTION_DOWNLOAD,
 	GS_PLUGIN_ACTION_GET_ALTERNATES,
 	GS_PLUGIN_ACTION_GET_LANGPACKS,
+	GS_PLUGIN_ACTION_SHOW_EULA,
 	/*< private >*/
 	GS_PLUGIN_ACTION_LAST
 } GsPluginAction;

@@ -95,6 +95,7 @@ shared_module(
   sources : [
     'gs-plugin-packagekit-refresh.c',
     'gs-packagekit-helper.c',
+    'gs-task.c',
     'packagekit-common.c',
   ],
   include_directories : [

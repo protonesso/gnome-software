@@ -13,6 +13,7 @@
 #include <glib/gi18n.h>
 
 #include "gs-common.h"
+#include "gs-eula-dialog.h"
 #include "gs-shell.h"
 #include "gs-details-page.h"
 #include "gs-installed-page.h"
@@ -66,6 +67,7 @@ typedef struct
 	gchar			*events_info_uri;
 	gboolean		 in_mode_change;
 	GsPage			*page;
+	//GsTask			*task;
 } GsShellPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GsShell, gs_shell, G_TYPE_OBJECT)
@@ -1659,6 +1661,41 @@ gs_shell_show_event_url_to_app (GsShell *shell, GsPluginEvent *event)
 }
 
 static gboolean
+gs_shell_show_event_show_eula (GsShell *shell, GsPluginEvent *event)
+{
+
+	/* const gchar *package_id; */
+	/* const gchar *vendor_name; */
+	/* const gchar *license_agreement; */
+	/* g_autofree gchar *printable = NULL; */
+	/* g_auto(GStrv) split = NULL; */
+	GsEulaDialog *eula_dialog;
+	GsShellPrivate *priv;
+
+	priv = gs_shell_get_instance_private (shell);
+
+	/* Get needed data from GsTask and populate them to GsEulaDialog. */
+	/* package_id = gs_task_get_package_id (task); */
+	/* vendor_name = gs_task_get_vendor_name (task); */
+	/* license_agreement = gs_task_get_license_agreement (task); */
+	/* split = pk_package_id_split (package_id); */
+	/* printable = g_markup_printf_escaped ("<b><big>License required for %s by %s</big></b>", */
+	/* 				     split[0], vendor_name); */
+
+	eula_dialog = gs_eula_dialog_new ();
+	/* gs_eula_dialog_set_label here. */
+	gs_eula_dialog_populate_license_agreement (eula_dialog,
+						   "license agreement");
+	//license_agreement);
+
+	gtk_window_set_transient_for (GTK_WINDOW (eula_dialog),
+				      priv->main_window);
+	gtk_widget_show (GTK_WIDGET (eula_dialog));
+
+	return TRUE;
+}
+
+static gboolean
 gs_shell_show_event_fallback (GsShell *shell, GsPluginEvent *event)
 {
 	GsApp *app = gs_plugin_event_get_app (event);
@@ -1777,6 +1814,8 @@ gs_shell_show_event (GsShell *shell, GsPluginEvent *event)
 		return gs_shell_show_event_file_to_app (shell, event);
 	case GS_PLUGIN_ACTION_URL_TO_APP:
 		return gs_shell_show_event_url_to_app (shell, event);
+	case GS_PLUGIN_ACTION_SHOW_EULA:
+		return gs_shell_show_event_show_eula (shell, event);
 	default:
 		break;
 	}
@@ -2224,6 +2263,7 @@ gs_shell_dispose (GObject *object)
 	g_clear_object (&priv->header_start_widget);
 	g_clear_object (&priv->header_end_widget);
 	g_clear_object (&priv->page);
+	/* g_clear_object (&priv->task); */
 	g_clear_pointer (&priv->pages, g_hash_table_unref);
 	g_clear_pointer (&priv->events_info_uri, g_free);
 	g_clear_pointer (&priv->modal_dialogs, g_ptr_array_unref);

@@ -13,6 +13,7 @@
 
 #include "gs-metered.h"
 #include "gs-packagekit-helper.h"
+#include "gs-task.h"
 #include "packagekit-common.h"
 
 /*
@@ -26,15 +27,35 @@ struct GsPluginData {
 	GMutex			 task_mutex;
 };
 
+static void
+eula_question_cb (GsTask *task,
+		  PkEulaRequired *item,
+		  gpointer user_data)
+{
+	GsPlugin *plugin = GS_PLUGIN (user_data);
+	g_autoptr(GsPluginEvent) event = gs_plugin_event_new ();
+	g_autoptr(GError) error = NULL;
+
+	error = g_error_new_literal (GS_PLUGIN_ERROR,
+				     GS_PLUGIN_ERROR_AUTH_REQUIRED,
+				     "You've to agree/decline a license");
+	gs_plugin_event_set_error (event, error);
+	gs_plugin_event_set_action (event, GS_PLUGIN_ACTION_SHOW_EULA);
+	gs_plugin_event_add_flag (event, GS_PLUGIN_EVENT_FLAG_INTERACTIVE);
+	gs_plugin_report_event (plugin, event);
+}
+
 void
 gs_plugin_initialize (GsPlugin *plugin)
 {
 	GsPluginData *priv = gs_plugin_alloc_data (plugin, sizeof(GsPluginData));
 
 	g_mutex_init (&priv->task_mutex);
-	priv->task = pk_task_new ();
+	priv->task = PK_TASK (gs_task_new ());
 	pk_task_set_only_download (priv->task, TRUE);
 	pk_client_set_background (PK_CLIENT (priv->task), TRUE);
+	g_signal_connect (GS_TASK (priv->task), "eula-question",
+			  G_CALLBACK (eula_question_cb), plugin);
 
 	/* we can return better results than dpkg directly */
 	gs_plugin_add_rule (plugin, GS_PLUGIN_RULE_CONFLICTS, "dpkg");

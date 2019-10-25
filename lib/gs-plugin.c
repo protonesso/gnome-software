@@ -1591,6 +1591,8 @@ gs_plugin_action_to_function_name (GsPluginAction action)
 		return "gs_plugin_add_alternates";
 	if (action == GS_PLUGIN_ACTION_GET_LANGPACKS)
 		return "gs_plugin_add_langpacks";
+	if (action == GS_PLUGIN_ACTION_SHOW_EULA)
+		return "gs_plugin_show_eula";
 	return NULL;
 }
 
@@ -1687,6 +1689,8 @@ gs_plugin_action_to_string (GsPluginAction action)
 		return "get-alternates";
 	if (action == GS_PLUGIN_ACTION_GET_LANGPACKS)
 		return "get-langpacks";
+	if (action == GS_PLUGIN_ACTION_SHOW_EULA)
+		return "show-eula";
 	return NULL;
 }
 

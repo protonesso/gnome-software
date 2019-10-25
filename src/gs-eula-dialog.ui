@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GsEulaDialog" parent="GtkDialog">
+    <property name="default-height">500</property>
+    <property name="default-width">500</property>
+    <property name="modal">True</property>
+    <property name="title" translatable="yes">License Agreement Required</property>
+    <signal name="response" handler="gs_eula_dialog_response_cb"/>
+    <child type="action">
+      <object class="GtkButton" id="reject_button">
+        <property name="label">Reject</property>
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="accept_button">
+        <property name="can-default">True</property>
+        <property name="label" translatable="yes">Accept</property>
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow">
+            <property name="can-focus">False</property>
+            <property name="shadow-type">in</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkTextView" id="details_textview">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="border-width">6</property>
+                <property name="editable">False</property>
+                <property name="wrap-mode">word</property>
+                <property name="cursor-visible">False</property>
+                <property name="accepts-tab">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">reject_button</action-widget>
+      <action-widget response="ok" default="true">accept_button</action-widget>
+    </action-widgets>
+  </template>
+</interface>

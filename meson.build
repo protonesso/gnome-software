@@ -96,6 +96,7 @@ add_project_arguments('-D_GNU_SOURCE', language : 'c')
 
 conf.set('HAVE_LINUX_UNISTD_H', cc.has_header('linux/unistd.h'))
 
+packagekit_glib = dependency('packagekit-glib2')
 appstream_glib = dependency('appstream-glib', version : '>= 0.7.14')
 gdk_pixbuf = dependency('gdk-pixbuf-2.0', version : '>= 2.32.0')
 libxmlb = dependency('xmlb', version : '>= 0.1.7', fallback : ['libxmlb', 'libxmlb_dep'])
