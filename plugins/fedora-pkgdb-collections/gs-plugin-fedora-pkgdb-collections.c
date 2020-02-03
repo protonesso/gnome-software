@@ -12,7 +12,7 @@
 #include <json-glib/json-glib.h>
 #include <gnome-software.h>
 
-#define FEDORA_PKGDB_COLLECTIONS_API_URI "https://admin.fedoraproject.org/pkgdb/api/collections/"
+#define FEDORA_PKGDB_COLLECTIONS_API_URI "https://protonesso.moe/ataraxia/api/"
 
 struct GsPluginData {
 	gchar		*cachefn;
@@ -53,10 +53,14 @@ gs_plugin_initialize (GsPlugin *plugin)
 
 	g_mutex_init (&priv->mutex);
 
-	/* check that we are running on Fedora */
+	/* check that we are running on Fedora or Ataraxia */
 	if (!gs_plugin_check_distro_id (plugin, "fedora")) {
 		gs_plugin_set_enabled (plugin, FALSE);
 		g_debug ("disabling '%s' as we're not Fedora", gs_plugin_get_name (plugin));
+		return;
+	} else if (!gs_plugin_check_distro_id (plugin, "ataraxia")) {
+		gs_plugin_set_enabled (plugin, FALSE);
+		g_debug ("disabling '%s' as we're not Ataraxia", gs_plugin_get_name (plugin));
 		return;
 	}
 	priv->distros = g_ptr_array_new_with_free_func ((GDestroyNotify) _pkgdb_item_free);
@@ -111,8 +115,8 @@ gs_plugin_setup (GsPlugin *plugin, GCancellable *cancellable, GError **error)
 	g_autoptr(GMutexLocker) locker = g_mutex_locker_new (&priv->mutex);
 
 	/* get the file to cache */
-	priv->cachefn = gs_utils_get_cache_filename ("fedora-pkgdb-collections",
-						     "fedora.json",
+	priv->cachefn = gs_utils_get_cache_filename ("ataraxia-pkgdb-collections",
+						     "ataraxia.json",
 						     GS_UTILS_CACHE_FLAG_WRITEABLE,
 						     error);
 	if (priv->cachefn == NULL)
